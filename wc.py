@@ -34,8 +34,8 @@ def main():
 def lines(args):
     ''' 返回文件 file.c 的行数'''
     try:
-        with open(args,'r',encoding='UTF-8') as file:
-            i = len(file.readlines())
+        with open(args,'r',encoding='UTF-8') as file:# 指定读取的编码方式为UTF-8
+            i = file.read().count('\n')
             return i+1
     except FileNotFoundError:
         return '未找到该文件！'
@@ -45,7 +45,7 @@ def words(args):
     try:
         with open(args,'r',encoding='UTF-8') as f:
             file = f.readlines()
-            space_flag = False
+            space_flag = False  # 标记上一个字符是否为空格
             words_num = 0
             for x in file:
                 for y in x:
