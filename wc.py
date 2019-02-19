@@ -11,46 +11,12 @@
 
 # here put the import lib
 import sys
+from os import getcwd, listdir
 from os.path import isdir, join
-from os import listdir, getcwd
-from re import match
 
+from individual_file import *
+from Command_line_arguments import *
 
-class FileTypeError(BaseException):
-    '''文件类型错误'''
-    pass
-
-
-class ArgvError(BaseException):
-    '''命令行参数错误'''
-    pass
-
-
-class ArgvNotFoundError(BaseException):
-    '''找不到命令行参数错误'''
-    pass
-
-def words(List):
-    pass
-
-def chars(List):
-    pass
-
-def solve_individual_file(path,command):
-    des = ''
-    with open(path) as File:
-        lines= File.readlines()
-        if '-l' in command:
-            des1 = '行数：{0}行\n'.format(len(lines))
-            des += des1
-            if '-a' in command:
-                pass
-        elif '-a' in command:
-            pass
-        if '-w' in command:
-            pass
-        if '-c' in command:
-            pass
 
 def main():
     # 主程序
@@ -87,56 +53,8 @@ def main():
     else:
         # 处理基础命令
         for x in file_list:
-            if '-l' in command:
-                pass
-            elif '-w' in command:
-                pass
-            elif '-c' in command:
-                pass
+            solve_individual_file(x, command)
     print(infomation)
-
-
-def dir_list(path=getcwd()):
-    L = []
-    l = listdir(path)
-    for x in l:
-        if isdir(x):
-            L.append(dir_list(x))
-        else:
-            L.append(x)
-    return L
-
-
-def is_file(name):
-    '''
-        判定一个命令行参数是不是文件名
-    '''
-    if match('-[sxalwc]', name):
-        # 是不是所要的命令行参数
-        return False
-    elif match('[a-zA-z0-9_]*\.[a-zA-z0-9_]*', name):
-        if match('[a-zA-z0-9_]*\.cpp', name):
-            return True
-        else:
-            raise FileTypeError('无法处理的文件类型')
-    else:
-        raise ArgvError('无效的命令行参数')
-
-
-def classify_command(argv):
-    '''
-        命令行参数分类
-    '''
-    if len(argv) == 0:
-        raise ArgvNotFoundError
-    command = []
-    file_list = []
-    for x in set(argv):
-        if is_file(x):
-            file_list.append(x)
-        else:
-            command.append(x)
-    return command, file_list
 
 
 if __name__ == '__main__':
