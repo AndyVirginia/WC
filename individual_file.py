@@ -10,21 +10,43 @@
 '''
 
 # here put the import lib
+from re import findall, search, match
 
+
+def additional__line(List, type='c/c++'):
+    '''
+        根据程序语言种类返回行数详细信息
+    '''
+    comments = 0
+    codes = 0
+    spaces = 0
+    for line in List:
+        if search('', line):
+            pass
+        elif search('', line):
+            pass
+        else:
+            pass
 
 
 def words(List):
     '''
         单词数统计
     '''
-    pass
+    s = 0
+    for line in List:
+        s += len(findall('^[a-zA-Z0-9]+$', line))
+    return '单词数：{0}个\n'.format(s)
 
 
 def chars(List):
     '''
         字符数统计
     '''
-    pass
+    c = 0
+    for line in List:
+        c += len(findall('[a-zA-z0-9]', line))
+    return '字符数：{0}个'.format(c)
 
 
 def solve_individual_file(path, command):
@@ -39,6 +61,11 @@ def solve_individual_file(path, command):
         elif '-a' in command:
             pass
         if '-w' in command:
-            pass
+            des += words(lines)
         if '-c' in command:
-            pass
+            des += chars(lines)
+    return des
+
+
+if __name__ == "__main__":
+    print(solve_individual_file('test.py', ['-c', ]))

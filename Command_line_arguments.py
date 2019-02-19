@@ -10,24 +10,17 @@
 '''
 
 # here put the import lib
-from os import getcwd, listdir
+from os import getcwd,listdir
 from re import match
 
-
-class FileTypeError(BaseException):
-    '''文件类型错误'''
-    pass
-
-
 class ArgvError(BaseException):
-    '''命令行参数错误'''
     pass
-
 
 class ArgvNotFoundError(BaseException):
-    '''找不到命令行参数错误'''
     pass
 
+class FileTypeError(BaseException):
+    pass
 
 def is_file(name):
     '''
