@@ -21,6 +21,7 @@ class WordCounter():
     def __init__(self, command):
         self.tra = False
         self.classify_command(command)
+        self.message = ''
         if self.tra:
             self.traverse()
         else:
@@ -42,22 +43,30 @@ class WordCounter():
             if match(com_pattern, x):
                 self.com.append(x)
             elif match(file_pattern, x):
-                self.file_list.append(x)
+                if self.is_c(x):
+                    self.file_list.append(x)
 
     def wc_process(self):
         '''逐个查询目标文件的信息'''
         for x in self.file_list:
-            FileInformation(self.com, x)
+            f= FileInformation(self.com, x)
+            self.message += f.info
 
     def traverse(self, path=None):
         '''遍历'''
-        self.message = ''
         for x in listdir(path):
             if isfile(x):
-                f = FileInformation(self.com, x)
-                self.message += f.info
+                if self.is_c(x):
+                    f = FileInformation(self.com, x)
+                    self.message += f.info
             elif isdir(x):
                 self.traverse(x)
+
+    def is_c(self, name):
+        if match('[a-zA-Z0-9_]*\.c|[a-zA-Z0-9_]*\.cpp', name):
+            return True
+        else:
+            return False
 
 
 class FileInformation():
@@ -65,7 +74,7 @@ class FileInformation():
     def __init__(self, opt, filename):
         self.opt = opt
         self.file = filename
-        with open(filename, encoding='utf-8') as f:
+        with open(filename, mode='r', encoding='utf-8') as f:
             l = f.readlines()
             self.words(l)
             self.chars(l)
@@ -81,16 +90,16 @@ class FileInformation():
             self.info += '字符数：\t{0}\n'.format(self.char_num)
         if '-l' in self.opt:
             self.info += '行数：\t{0}\n'.format(self.comment_line +
-                                      self.space_line+self.code_line)
+                                             self.space_line+self.code_line)
             line = True
         if '-a' in self.opt:
-            des = '代码行：\t{0}\n注释行:\t{1}\n空行:\t{2}\n\n'.format(
+            des = '代码行：\t{0}\n注释行：\t{1}\n空行：\t{2}\n\n'.format(
                 self.code_line, self.comment_line, self.space_line)
             if line:
                 self.info += des
             else:
                 self.info += '行数：\t{0}\n'.format(self.comment_line +
-                                          self.space_line+self.code_line)+des
+                                                 self.space_line+self.code_line)+des
 
     def words(self, List):
         '''
@@ -109,12 +118,6 @@ class FileInformation():
         self.char_num = 0
         for line in List:
             self.char_num += len(findall(char_pattern, line))
-
-    def file_process(self):
-        '''
-            文件处理主函数
-        '''
-        pass
 
     def line(self, List):
         '''
@@ -149,4 +152,4 @@ class FileInformation():
 
 
 if __name__ == "__main__":
-    WordCounter(['-s', '-a', '-w','-l', ])
+    WordCounter(sys.argv)
